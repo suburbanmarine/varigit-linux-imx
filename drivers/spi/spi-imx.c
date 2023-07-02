@@ -1639,6 +1639,8 @@ static int spi_imx_slave_abort(struct spi_master *master)
 
 static int spi_imx_probe(struct platform_device *pdev)
 {
+	dev_info(&pdev->dev, "spi-imx probe start\n");
+
 	struct device_node *np = pdev->dev.of_node;
 	const struct of_device_id *of_id =
 			of_match_device(spi_imx_dt_ids, &pdev->dev);
@@ -1795,8 +1797,15 @@ static int spi_imx_probe(struct platform_device *pdev)
 	/* Request GPIO CS lines, if any */
 	if (!spi_imx->slave_mode && master->cs_gpios) {
 		for (i = 0; i < master->num_chipselect; i++) {
-			if (!gpio_is_valid(master->cs_gpios[i]))
+			if (!gpio_is_valid(master->cs_gpios[i])) {
+				if(master->cs_gpios[i] == -EPROBE_DEFER) {
+					dev_info(&pdev->dev, "spi-master->cs_gpios[i] is EPROBE_DEFER, defer spi probe\n");
+					ret = -EPROBE_DEFER;
+					goto out_spi_bitbang;
+				}
+				dev_info(&pdev->dev, "spi-imx warn - gpio invalid\n");
 				continue;
+			}
 
 			ret = devm_gpio_request(&pdev->dev,
 						master->cs_gpios[i],
@@ -1805,6 +1814,14 @@ static int spi_imx_probe(struct platform_device *pdev)
 				dev_err(&pdev->dev, "Can't get CS GPIO %i\n",
 					master->cs_gpios[i]);
 				goto out_spi_bitbang;
+			}
+
+			gpio_set_value(master->cs_gpios[i], 1);
+			ret = gpio_direction_output(master->cs_gpios[i], GPIOF_DIR_OUT);
+			if(ret) {
+				dev_err(&pdev->dev, "Can't set CS GPIO to output %i\n",
+					master->cs_gpios[i]);
+				goto out_spi_bitbang;	
 			}
 		}
 	}
