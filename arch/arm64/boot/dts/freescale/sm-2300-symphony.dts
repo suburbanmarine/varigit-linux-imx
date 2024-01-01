@@ -1,0 +1,9 @@
+/dts-v1/;
+
+#include "imx93-var-som.dtsi"
+#include "imx93-var-som-symphony.dtsi"
+
+/ {
+    /* VAR-SOM-MX93D_V2_1700C_2048R_16G_AC_EC_TP_WBD_ET */
+    model = "SM-2300 with VAR-SOM-MX93 2.x and newer on Symphony-Board";
+};
