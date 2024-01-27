@@ -7,25 +7,6 @@
     /* VAR-SOM-MX93D_V2_1700C_2048R_16G_AC_EC_TP_WBD_ET */
     model = "SM-2300 with VAR-SOM-MX93 2.x and newer on Symphony-Board";
 
-    &lpuart7 {
-        status = "ok";
-    };
-
-
-    &lpi2c7 {
-        #address-cells = <1>;
-        #size-cells = <0>;
-        clock-frequency = <100000>;
-        pinctrl-names = "default", "sleep", "gpio";
-        pinctrl-0 = <&pinctrl_lpi2c7>;
-        pinctrl-1 = <&pinctrl_lpi2c7_gpio>;
-        pinctrl-2 = <&pinctrl_lpi2c7_gpio>;
-        scl-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
-        sda-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
-        
-        status = "disabled";
-    };
-
     pinctrl_lpi2c7: lpi2c7grp {
         fsl,pins = <
             MX93_PAD_GPIO_IO06__LPI2C7_SDA          0x40000b9e
@@ -39,4 +20,23 @@
             MX93_PAD_GPIO_IO07__GPIO2_IO07          0x40000b9e
         >;
     };
+};
+
+&lpuart7 {
+    status = "ok";
+};
+
+
+&lpi2c7 {
+    #address-cells = <1>;
+    #size-cells = <0>;
+    clock-frequency = <100000>;
+    pinctrl-names = "default", "sleep", "gpio";
+    pinctrl-0 = <&pinctrl_lpi2c7>;
+    pinctrl-1 = <&pinctrl_lpi2c7_gpio>;
+    pinctrl-2 = <&pinctrl_lpi2c7_gpio>;
+    scl-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
+    sda-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
+    
+    status = "disabled";
 };
