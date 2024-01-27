@@ -38,5 +38,5 @@
     scl-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
     sda-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
     
-    status = "disabled";
+    status = "ok";
 };
