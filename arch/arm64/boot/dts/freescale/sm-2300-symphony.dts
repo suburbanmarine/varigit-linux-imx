@@ -9,21 +9,21 @@
 
     pinctrl_lpi2c7: lpi2c7grp {
         fsl,pins = <
-            MX93_PAD_GPIO_IO06__LPI2C7_SDA          0x40000b9e
             MX93_PAD_GPIO_IO07__LPI2C7_SCL          0x40000b9e
+            MX93_PAD_GPIO_IO06__LPI2C7_SDA          0x40000b9e
         >;
     };
 
     pinctrl_lpi2c7_gpio: lpi2c7grp-gpio {
         fsl,pins = <
-            MX93_PAD_GPIO_IO06__GPIO2_IO06          0x40000b9e
             MX93_PAD_GPIO_IO07__GPIO2_IO07          0x40000b9e
+            MX93_PAD_GPIO_IO06__GPIO2_IO06          0x40000b9e
         >;
     };
 };
 
 &lpuart7 {
-    status = "ok";
+    status = "okay";
 };
 
 
@@ -37,6 +37,38 @@
     pinctrl-2 = <&pinctrl_lpi2c7_gpio>;
     scl-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
     sda-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
+    status = "okay";
     
-    status = "ok";
+    rtc: rtc@32 {
+        compatible = "epson,rx8900";
+        reg = <0x32>;
+        epson,vdet-disable;
+
+        //Wake ISR
+        // interrupt-parent = <&gpio5>;
+        // interrupts = <3>;
+    };
+/*
+    eeprom@50 {
+        compatible = "atmel,24c64";
+        reg = <0x50>;
+        
+        label = "Config FRAM";
+        pagesize = <8192>;
+        size     = <8192>;
+        address-width = <16>;
+        num-addresses = <1>;
+    };
+
+    eeprom@51 {
+        compatible = "st,24c64", "atmel,24c64";
+        reg = <0x51>;
+         
+        label = "Cal EEPROM";
+        pagesize = <32>;
+        size     = <8192>;
+        address-width = <16>;
+        num-addresses = <1>;
+    };
+*/
 };
